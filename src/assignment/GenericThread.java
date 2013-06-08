@@ -27,9 +27,11 @@ public class GenericThread implements Runnable
 
 				//Global.sem.acquire();
 				//Global.CLHBarrier.lock();
-				Global.MCSBarrier.lock();
+				//Global.MCSBarrier.lock();
+				Global.TTASBarrier.lock();
 				Global.global_counter++;
-				Global.MCSBarrier.lock();
+				Global.TTASBarrier.unlock();
+				//Global.MCSBarrier.unlock();
 				//Global.CLHBarrier.unlock();
 				//Global.sem.release();
 				count++;
