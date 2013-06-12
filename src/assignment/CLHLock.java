@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class CLHLock implements Lock {
   // most recent lock holder
   AtomicReference<QNode> tail;
+  
   // thread-local variables
   ThreadLocal<QNode> myNode, myPred;
   
@@ -44,6 +45,11 @@ public class CLHLock implements Lock {
     };
   }
   
+  //Cria um nó para mim e marca locked=true. Mostrando o meu desejo de entrar na RC
+  //Pega o último da fila com tail.getAndSet(qnode);
+  //Você entra atrás deste ultimo.
+  //Enquanto o cara que está na sua frente nao terminou de usar, espere.
+  //A fila e virtualizada. Cada um só olha para a frente.
   public void lock() {
     QNode qnode = myNode.get(); // use my node
     qnode.locked = true;        // announce start
@@ -57,6 +63,33 @@ public class CLHLock implements Lock {
     qnode.locked = false;       // announce finish
     myNode.set(myPred.get());   // reuse predecessor
   }
+  public boolean isLocked()
+  {
+	  //If the queue is empty, no one is holding the lock.
+	  if(tail.get() == null)
+		  return false;
+	  //If there is someone on the queue
+	  else
+	  {
+		  //If the last element is locked. Then himself is in the CS or waiting for some of his predecessor to leave.
+		  QNode current = tail.get();
+		  if (current.locked == true)
+			  return true;
+		  //If he is not in the CS nor waiting, then none is holding the lock.
+		  else
+			  return false;
+	  }
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   // any class that implements lock must provide these methods
   public Condition newCondition() {

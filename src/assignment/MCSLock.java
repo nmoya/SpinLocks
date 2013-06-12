@@ -51,6 +51,21 @@ public class MCSLock implements Lock {
     qnode.next.locked = false;
     qnode.next = null;
   }
+  public boolean isLocked ()
+  {
+	  return true;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   // any class implementing Lock must provide these methods
   public Condition newCondition() {

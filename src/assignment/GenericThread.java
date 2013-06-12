@@ -9,31 +9,55 @@ import main.Global;
 public class GenericThread implements Runnable 
 {
 	private int id;	
-	public GenericThread(int id) 
+	private String lockMethod;
+	public GenericThread(int id, String lockMethod) 
 	{
 		this.id = id;
+		this.lockMethod = lockMethod;
 	}
 	public int getID() { return this.id; }
 	public void run() 
 	{
+		
+
 		//Random randint = new Random(42);
 		int count = 0;
 		//this.info("iniciado");
 		try {
-			
-			
+			Thread.sleep(500);	//Wait until WATCHER thread starts
 			while(count < Global.iteracoes)
 			{
+				try{
+					//Test which lock will be used before entering the CS.
+					if (this.lockMethod.equals("CLH"))
+						Global.CLHBarrier.lock();
+					else if (this.lockMethod.equals("MCS"))
+						Global.MCSBarrier.lock();
+					else if (this.lockMethod.equals("TTAS"))
+						Global.TTASBarrier.lock();
+					else if (this.lockMethod.equals("TAS"))
+						Global.TASBarrier.lock();
+					else if (this.lockMethod.equals("SEM"))
+						Global.sem.acquire();
 
-				//Global.sem.acquire();
-				//Global.CLHBarrier.lock();
-				//Global.MCSBarrier.lock();
-				Global.TTASBarrier.lock();
-				Global.global_counter++;
-				Global.TTASBarrier.unlock();
-				//Global.MCSBarrier.unlock();
-				//Global.CLHBarrier.unlock();
-				//Global.sem.release();
+					//CS
+					Global.global_counter++;
+					
+				} 
+				finally { 
+					//Leaving the critical session with the same lock mechanism.
+					if (this.lockMethod.equals("CLH"))
+						Global.CLHBarrier.unlock();
+					else if (this.lockMethod.equals("MCS"))
+						Global.MCSBarrier.unlock();
+					else if (this.lockMethod.equals("TTAS"))
+						Global.TTASBarrier.unlock();
+					else if (this.lockMethod.equals("TAS"))
+						Global.TASBarrier.unlock();
+					else if (this.lockMethod.equals("SEM"))
+						Global.sem.release();
+				}
+
 				count++;
 			}
 			
@@ -48,3 +72,4 @@ public class GenericThread implements Runnable
 		System.out.println("Thread " + this.getID() + ": " + s);
 	}
 }
+
