@@ -27,10 +27,8 @@ public class TASLock implements Lock {
   public boolean isLocked ()
   {
 	  //If state is TRUE, then a thread is holding the lock.
-	  if (state.get())
-		  return true;
-	  else 	//Otherwise
-		  return false;
+	  //False, otherwise
+	  return state.get();
   }
   
   

@@ -56,7 +56,7 @@ public class CLHLock implements Lock {
     // Make me the new tail, and find my predecessor
     QNode pred = tail.getAndSet(qnode);
     myPred.set(pred);           // remember predecessor
-    while (pred.locked) {}      // spin
+    while (pred.locked) {System.out.print("");}      // spin
   }
   public void unlock() {
     QNode qnode = myNode.get(); // use my node

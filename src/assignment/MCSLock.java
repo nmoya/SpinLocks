@@ -38,22 +38,30 @@ public class MCSLock implements Lock {
     if (pred != null) {
       qnode.locked = true;
       pred.next = qnode;
-      while (qnode.locked) {}     // spin
+      while (qnode.locked) {System.out.print("");}     // spin
     }
   }
+  
   public void unlock() {
     QNode qnode = myNode.get();
     if (qnode.next == null) {
       if (queue.compareAndSet(qnode, null))
-        return;
+    	  return;  
       while (qnode.next == null) {} // spin
     }
     qnode.next.locked = false;
     qnode.next = null;
   }
+  
   public boolean isLocked ()
   {
-	  return true;
+	  //If there is only one thread and this thread finishes the lock, while unlocking, it set's the queue variable to null
+	  //If the queue variable is not null, then either the thread is holding the lock, or some other thread is using and the thread is waiting for its turn.
+	  QNode tail = queue.get();
+	  if (tail == null)
+		  return false;
+	  else
+		  return true;
   }
   
   

@@ -57,6 +57,8 @@ public class TestIsLocked implements Runnable
 				}
 				if (activeThreads == 0)
 					break;
+				//System.out.println("Still Active Threads: " + activeThreads);
+				Thread.sleep(45);
 			}
 			
 			

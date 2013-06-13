@@ -41,8 +41,9 @@ public class GenericThread implements Runnable
 						Global.sem.acquire();
 
 					//CS
-					Global.global_counter++;
-					
+					this.info("Acquired the Lock");
+					Thread.sleep(50);
+					this.info("Released the Unlock");
 				} 
 				finally { 
 					//Leaving the critical session with the same lock mechanism.

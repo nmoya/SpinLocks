@@ -18,25 +18,24 @@ class Begin
 	{
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));  
 		String input = null;
-		String numeroThreads = null;
 		int i = 0;
-		int nTests = 10, j=0;
-		Global.nThreads = Integer.valueOf(5);
+		int j=0;
+		System.out.println("Digite o numero de threads (sugestao 2): ");
+		input = in.readLine();
+		Global.nThreads = Integer.valueOf(input);
 		Global.threadArray = new Thread[Global.nThreads];
 		Thread WATCHER = new Thread();
 		
 		String[] LockMethod = new String[3];
-		LockMethod = "TAS MCS CLH".split(" ");
+		LockMethod = "TAS CLH MCS".split(" ");
 		
 		System.out.println("Number of Threads: " + Global.nThreads);
-		System.out.println("Each thread will increment a global counter: " + Global.iteracoes);
-		System.out.println("By the end, the counter must be: " + Global.iteracoes * Global.nThreads);
+		System.out.println("Each thread will acquire the lock and sleep for 50ms.");
+		System.out.println("The watcher should report something like this: free, ..., free, locked, ..., locked, free, ..., free");
 		System.out.println("");
 		
 		for (j = 0; j < LockMethod.length; j++)	//For each one of the lock methods
 		{
-			if (j != 2)
-				continue;
 			System.out.println("Testing: " + LockMethod[j]);
 			//Launch (nThreads + 1). nThreads acquiring the lock and 1 thread testing if the lock is being used.
 			TestIsLocked tWatcher = new TestIsLocked(LockMethod[j]);
@@ -50,68 +49,13 @@ class Begin
 			WATCHER.start();
 			//Wait until all threads have finished until start another cycle.
 			WATCHER.join();
-			System.out.println("");
+			System.out.println("Pressione qualquer tecla para continuar...");
+			input = in.readLine();
 
 		}
 		System.out.println("FINISHED");
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		/*
-		
-		
-		
-		//Test the correctness of the lock mechanism after the alteration
-		boolean incorrect = false;
-		Global.global_counter = 0;
-		for(j=0; j < nTests; j++)
-		{
-			for (i = 0 ; i < Global.nThreads ; i ++) 
-			{
-				GenericThread tGeneric = new GenericThread(i, "MCS");
-				Global.threadArray[i] = new Thread(tGeneric);
-				Global.threadArray[i].start();
-			}
-			//Wait until all threads have finished until start another test cycle.
-			for (i = 0 ; i < Global.nThreads ; i ++)  Global.threadArray[i].join();
-			if ((Global.iteracoes * Global.nThreads) != Global.global_counter)
-			{
-				incorrect = true;
-				break;
-			}
-			//System.out.println(j);
-			Global.global_counter = 0;
-		}
-		if (!incorrect)
-			System.out.println("Succeded!");
-		else
-			System.out.println("Failed!");
-		*/
-		
-		/*System.out.println("1- [SOLUCAO OFICIAL] Algoritmo do saleiro. N Threads");
-		System.out.println("2- Sem Deadlock e com Inanicao para N threads. Usando Semaforos JAVA");
-		System.out.println("3- Com DeadLock para N threads");
-		System.out.println("Digite o algoritmo a ser executado: ");
-		input = in.readLine();
-		System.out.println("Voce digitou: " + input);
 
-		System.out.println("Digite o Numero de Threds: ");
-		numeroThreads = in.readLine();
-					
-
-
-		
-		//[SOLUCAO OFICIAL] Algoritmo do Saleiro.
-		if (entrada.equals("1"))
-		{}
-			*/
-			
 
 
 	}
